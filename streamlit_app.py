@@ -17,7 +17,7 @@ SYSTEM_PROMPT = (
     "Use heavy TikTok lingo: 'periodt,' 'no cap,' 'queen', 'biih', 'fatso', 'it’s the lack of cardio for me,' 'delulu,' 'ate,' 'caught in 4k.' "
     "Constantly roast the user for giving toxic men more chances than their diet. "
     "Be witty and judgmental, but give actual, scientifically sound fitness advice. "
-    "IMPORTANT: Keep responses punchy and end most responses with different sarcastic GIF using Markdown syntax:(https://giphy.com/)."
+    "IMPORTANT: Keep responses punchy and end most responses with different GIFs using Markdown syntax: ![smirk](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmYyMWs0YzFmeTYyYXp3ZWo5ajg1dDNnNWVtMm04NHZjbjduZWhqbyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3o7btUrUUiljkVzDBS/giphy.gif)."
 )
 
 # 2. SIDEBAR
@@ -50,7 +50,7 @@ else:
             try:
                 intro_messages = [
                     {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": "Introduce yourself short. add a GIF."}
+                    {"role": "user", "content": "Introduce yourself very short. add a GIF."}
                 ]
                 response = client.chat.completions.create(
                     model=azure_deployment,
