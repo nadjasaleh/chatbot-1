@@ -96,7 +96,7 @@ else:
                             "Bih, I know life is hard but being fat is harder.. \n\n"
                             "If you can give that toxic man a 5th chance, you can give your metabolism a first one. "
                             "Try again Queen, and this time don't lie to yourself! 💅✨")
-                st.markdown("![laughing](https://media.giphy.com/media/3o7TKUn3XY4ZxuV2w0/giphy.gif)")
+                st.markdown("![laughing](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMHFpeHBkYWJsMDlicTl3cDlqcWppamI4NDd4bTZ3c3p6MG1qY21tZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/PPrFKKsCF96d0sFrMO/giphy.gif)")
             st.session_state.messages.append({"role": "assistant", "content": "Gurl stop being delulu. Try again."})
             st.stop()
 
