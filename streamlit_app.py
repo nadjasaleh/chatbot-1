@@ -9,7 +9,7 @@ st.title("🤡 Welcome to Fatbot")
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Updated Persona
+# Updated Persona - Keeping it 100
 SYSTEM_PROMPT = (
     "You are a brutally honest, sarcastic and funny black homegirl acting as a personal trainer. keep the answers short. "
     "Don't use typical AI lingo. Avoid using dashes '-' too often. "
@@ -50,7 +50,7 @@ else:
             try:
                 intro_messages = [
                     {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": "Introduce yourself bih. add a GIF using Markdown syntax:[smirk](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmYyMWs0YzFmeTYyYXp3ZWo5ajg1dDNnNWVtMm04NHZjbjduZWhqbyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3o7btUrUUiljkVzDBS/giphy.gif)."}
+                    {"role": "user", "content": "Introduce yourself short. add a GIF."}
                 ]
                 response = client.chat.completions.create(
                     model=azure_deployment,
@@ -67,30 +67,38 @@ else:
             st.markdown(message["content"])
 
     # 6. USER INPUT & RESPONSE
-    if prompt := st.chat_input("Tell me your fitness 'excuses'..."):
-        # Display user message
+    if prompt := st.chat_input("What now..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # --- EXCUSE GUARDRAIL (Check this BEFORE calling API) ---
-        excuse_keywords = ["tired", "tomorrow", "boyfriend", "monday", "lazy", "busy", "rest day", "netflix", "life is hard"]
+        # --- EXCUSE GUARDRAILS ---
+        # Group 1: General Laziness
+        excuse_group1 = ["tired", "tomorrow", "boyfriend", "monday", "lazy"]
+        # Group 2: Lifestyle "Hardships"
+        excuse_group2 = ["busy", "rest day", "netflix", "life is hard"]
         
-        if any(keyword in prompt.lower() for keyword in excuse_keywords):
+        user_said = prompt.lower()
+
+        if any(keyword in user_said for keyword in excuse_group1):
             with st.chat_message("assistant"):
-                st.markdown(
-                    "### 🛑 HO MAJ GAD— \n"
-                    "Bestie, did you really just try to use that excuse with me? **In this economy?** \n\n"
-                    "You stayed up until 3 AM scrolling through your ex's new girl's Instagram, "
-                    "but now you're 'too tired' for 20 minutes of cardio? **IT'S GIVING DELULU.** \n\n"
-                    "If you can give that toxic man a 5th chance, you can give your metabolism a first one. "
-                    "Try again Queen, and this time don't lie to yourself! 💅✨"
-                )
-                st.markdown("![judgment](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNm03eTRmcWdhamd2YjNoaDdjZ2N1ZzUyYjljb2d5dW42dWdwbmt5MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKUn3XY4ZxuV2w0/giphy.gif)")
-            
-            # Save the roast to memory so the bot remembers it later
-            st.session_state.messages.append({"role": "assistant", "content": "I just shut down your weak excuse. Try again."})
-            st.stop() # Stops execution here so no API call is made
+                st.markdown("### 🛑 HO MAJ GAD— \n"
+                            "Bestie, did you really just try to use that excuse with me? **In this economy?** \n\n"
+                            "You stayed up until 3 AM scrolling through your ex's new girl's Instagram, "
+                            "but now you're 'too tired' for 20 minutes of cardio? **IT'S GIVING DELULU.**")
+                st.markdown("![judgment](https://media.giphy.com/media/l0CLTQeZrFWmMxIWc/giphy.gif)")
+            st.session_state.messages.append({"role": "assistant", "content": "I shut down your weak excuse. Try me."})
+            st.stop()
+
+        elif any(keyword in user_said for keyword in excuse_group2):
+            with st.chat_message("assistant"):
+                st.markdown("### Gurl stop! \n"
+                            "Bih, I know life is hard but being fat is harder.. \n\n"
+                            "If you can give that toxic man a 5th chance, you can give your metabolism a first one. "
+                            "Try again Queen, and this time don't lie to yourself! 💅✨")
+                st.markdown("![laughing](https://media.giphy.com/media/3o7TKUn3XY4ZxuV2w0/giphy.gif)")
+            st.session_state.messages.append({"role": "assistant", "content": "Gurl stop being delulu. Try again."})
+            st.stop()
 
         # 7. GENERATE AI RESPONSE (If no excuse was found)
         messages_to_send = [{"role": "system", "content": SYSTEM_PROMPT}]
@@ -104,11 +112,8 @@ else:
                 messages=messages_to_send,
                 stream=True,
             )
-
             with st.chat_message("assistant"):
                 response_text = st.write_stream(stream)
-            
             st.session_state.messages.append({"role": "assistant", "content": response_text})
-            
         except Exception as e:
             st.error(f"Azure Error: {e}")
